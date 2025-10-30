@@ -11,6 +11,7 @@ import wandb
 from gymnasium.wrappers.record_video import RecordVideo
 from mpi4py import MPI
 from omegaconf import DictConfig, OmegaConf
+import env
 
 from modules import RolloutWorker
 from modules.agent import DDPG, SAC

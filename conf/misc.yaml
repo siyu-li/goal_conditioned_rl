@@ -39,6 +39,7 @@ logging_formats:
   - stdout
   - log
   - csv
+  - tensorboard
 
 # video logging
 log_video: False

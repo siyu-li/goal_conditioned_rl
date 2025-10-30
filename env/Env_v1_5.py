@@ -1,4 +1,5 @@
-## Two robot individually controlled (moving forward and turning) environment with centralized state/action space.
+## Two robot individually controlled (moving forward and turning) environment with centralized state/action space
+## and relative position observations for HER and goal-conditioned RL compatibility.
 ## Step reward is step_penalty - distance_to_goal_reward + collision_penalty + goal_reward
 
 import gymnasium as gym
@@ -6,6 +7,8 @@ from gymnasium import spaces
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Circle, Arrow
+
+
 class CentralizedTwoRobotEnv(gym.Env):
     metadata = {"render_modes": ["human", "rgb_array"], "render_fps": 30}
 
@@ -34,9 +37,19 @@ class CentralizedTwoRobotEnv(gym.Env):
         action_high = np.tile([self.max_step_size, np.pi], self.num_robots).astype(np.float32)
         self.action_space = spaces.Box(low=action_low, high=action_high, dtype=np.float32)
 
-        # Multi-goal observation dictionary expected by gymnasium-robotics
-        obs_low = np.tile([self.x_min, self.y_min, -np.pi], self.num_robots).astype(np.float32)
-        obs_high = np.tile([self.x_max, self.y_max, np.pi], self.num_robots).astype(np.float32)
+        # Static circular obstacles (x, y, radius)
+        self.obstacles = [(5.0, 15.0, 1.5), (15.0, 5.0, 1.5)]
+        self.num_obstacles = len(self.obstacles)
+
+        # Observation space: for each obstacle, relative positions of all robots and goals
+        # Per obstacle: (robot_rel_x, robot_rel_y, robot_theta) * num_robots + (goal_rel_x, goal_rel_y) * num_robots
+        # obs_dim = num_obstacles * (3 * num_robots + 2 * num_robots)
+        obs_dim_per_obstacle = 3 * self.num_robots + 2 * self.num_robots
+        obs_dim = obs_dim_per_obstacle * self.num_obstacles
+        
+        # Observation bounds: relative positions can span the entire workspace
+        obs_low, obs_high = self._build_observation_bounds()
+
         goal_low = np.tile([self.x_min, self.y_min], self.num_robots).astype(np.float32)
         goal_high = np.tile([self.x_max, self.y_max], self.num_robots).astype(np.float32)
         self.observation_space = spaces.Dict(
@@ -70,8 +83,6 @@ class CentralizedTwoRobotEnv(gym.Env):
             dtype=np.float32,
         )
 
-        # Static circular obstacles (x, y, radius)
-        self.obstacles = [(5.0, 15.0, 1.5), (15.0, 5.0, 1.5)]
         self.goal_threshold = 1.0
         self.goal_reward = 100.0
         self.step_penalty = -0.1
@@ -85,6 +96,21 @@ class CentralizedTwoRobotEnv(gym.Env):
 
         if self.render_mode == "human":
             plt.ion()
+
+    def _build_observation_bounds(self):
+        """Build observation bounds for relative positions."""
+        obs_low = []
+        obs_high = []
+        for _ in range(self.num_obstacles):
+            for _ in range(self.num_robots):
+                # Robot relative position (x, y, theta)
+                obs_low.extend([-self.x_max, -self.y_max, -np.pi])
+                obs_high.extend([self.x_max, self.y_max, np.pi])
+            for _ in range(self.num_robots):
+                # Goal relative position (x, y)
+                obs_low.extend([-self.x_max, -self.y_max])
+                obs_high.extend([self.x_max, self.y_max])
+        return np.array(obs_low, dtype=np.float32), np.array(obs_high, dtype=np.float32)
 
     def step(self, action):
         # Enforce action bounds so policy errors cannot break simulation
@@ -332,9 +358,28 @@ class CentralizedTwoRobotEnv(gym.Env):
         return float(np.linalg.norm(state[:, :2] - self.goal_position, axis=1).sum())
 
     def _get_obs(self):
-        # Observations include full robot states plus flattened goal representations
+        """
+        Constructs observation dictionary with relative positions.
+        Observation includes relative positions of robots and goals to obstacles.
+        """
+        obs = []
+        for obs_x, obs_y, _ in self.obstacles:
+            for robot_idx in range(self.num_robots):
+                # Robot relative to this obstacle
+                obs.extend([
+                    self.state[robot_idx, 0] - obs_x,
+                    self.state[robot_idx, 1] - obs_y,
+                    self.state[robot_idx, 2]
+                ])
+            for robot_idx in range(self.num_robots):
+                # Goal relative to this obstacle
+                obs.extend([
+                    self.goal_position[robot_idx, 0] - obs_x,
+                    self.goal_position[robot_idx, 1] - obs_y
+                ])
+        
         return {
-            "observation": self.state.flatten().astype(np.float32).copy(),
+            "observation": np.array(obs, dtype=np.float32).copy(),
             "achieved_goal": self.state[:, :2].flatten().astype(np.float32).copy(),
             "desired_goal": self.goal_position.flatten().astype(np.float32).copy(),
         }

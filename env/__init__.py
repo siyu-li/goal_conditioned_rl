@@ -7,7 +7,8 @@ This allows you to use your custom environment just like FetchPush-v2:
 
 from gymnasium.envs.registration import register
 
-# Register your custom environment
+# Register CentralizedTwoRobot-v1 environment
+# regular state representation
 register(
     id='CentralizedTwoRobot-v1',
     entry_point='env.Env_v1:CentralizedTwoRobotEnv',
@@ -15,13 +16,43 @@ register(
     kwargs={
         'group_id': 0,
         'robot_radius': 0.5,
-        'max_episode_steps': 1024,
+        'max_episode_steps': 50,
     }
 )
 
-print("✅ CentralizedTwoRobot-v1 registered successfully!")
-print("\nYou can now use it in training:")
-print("  python train.py env_name=CentralizedTwoRobot-v1")
-print("\nOr test it:")
-print("  import gymnasium as gym")
-print("  env = gym.make('CentralizedTwoRobot-v1')")
+# Register CentralizedTwoRobot-v1_5 environment
+register(
+    id='CentralizedTwoRobot-v1_5',
+    entry_point='env.Env_v1_5:CentralizedTwoRobotEnv',
+    max_episode_steps=50,
+    kwargs={
+        'group_id': 0,
+        'robot_radius': 0.5,
+        'max_episode_steps': 50,
+    }
+)
+
+# Register CentralizedMultiRobotEnv-v2 environment
+# obstacle as anchor state representation
+register(
+    id='CentralizedMultiRobotEnv-v2',
+    entry_point='env.Env_v2:CentralizedMultiRobotEnv',
+    max_episode_steps=50,
+    kwargs={
+        'robot_radius': 0.5,
+        'max_episode_steps': 50,
+    }
+)
+
+
+# Register CentralizedThreeRobot-v2_3r environment
+register(
+    id='CentralizedThreeRobot-v2_3r',
+    entry_point='env.Env_v2_3r:CentralizedThreeRobotEnv',
+    max_episode_steps=50,
+    kwargs={
+        'robot_radius': 0.5,
+        'max_episode_steps': 50,
+    }
+)
+

@@ -17,6 +17,7 @@ from modules.agent import DDPG, SAC
 from modules.gym_wrapper import setup_environments, setup_wrappers
 from modules.mpi_utils import logger
 from modules.utils import BatchEnv, get_env_samples
+import env
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

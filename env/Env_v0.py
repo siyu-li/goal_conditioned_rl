@@ -1,3 +1,6 @@
+## Two robot individually controlled (moving forward and turning) environment with centralized state/action space.
+## Step reward is step_penalty - (difference between current and last distance_to_goal) + collision_penalty + goal_reward
+
 import gymnasium as gym
 from gymnasium import spaces
 import numpy as np

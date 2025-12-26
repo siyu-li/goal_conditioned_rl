@@ -184,7 +184,7 @@ class CentralizedMultiRobotEnv(gym.Env):
 
         if self.render_mode == "human":
             self.render()
-        print(f"Step: {self.step_count}, Reward: {reward:.2f}, Terminated: {terminated}, Truncated: {truncated}, Info: {info}")
+        # print(f"Step: {self.step_count}, Reward: {reward:.2f}, Terminated: {terminated}, Truncated: {truncated}, Info: {info}")
 
         return obs, reward, terminated, truncated, info
 

@@ -48,6 +48,11 @@ python train.py env_name=CentralizedMultiRobotEnv-v7-1obs agent=sac n_epochs=200
 python train.py env_name=CentralizedMultiRobotEnv-v7-2obs agent=sac n_epochs=200
 python train.py env_name=CentralizedMultiRobotEnv-v7-3obs agent=sac n_epochs=200
 
+python train.py env_name=CentralizedMultiRobotEnv-v7-0obs-normalized agent=sac n_epochs=200
+python train.py env_name=CentralizedMultiRobotEnv-v7-1obs-normalized agent=sac n_epochs=500
+python train.py env_name=CentralizedMultiRobotEnv-v7-2obs-normalized agent=sac n_epochs=500
+python train.py env_name=CentralizedMultiRobotEnv-v7-3obs-normalized agent=sac n_epochs=500
+
 python demo.py --demo_path parker/CentralizedFourRobot-v2/sac_16-36-27
 python demo.py --demo_path parker/CentralizedTwoRobot-v1_5/sac_13-53-33
 python demo.py --demo_path parker/CentralizedThreeRobot-v2_3r/sac_15-04-39

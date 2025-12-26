@@ -35,9 +35,27 @@ python train.py n_epochs=10 agent=sac env_name=CentralizedTwoRobot-v1_5 hindsigh
 
 python train.py n_epochs=1000 agent=sac env_name=CentralizedThreeRobot-v2_3r hindsight=her agent.critic.dropout=0.0
 
+python train.py n_epochs=1000 agent=sac env_name=CentralizedMultiRobotEnv-v3 hindsight=her agent.critic.dropout=0.0
+
+python train.py n_epochs=200 agent=sac env_name=CentralizedMultiRobotEnv-v4 hindsight=her agent.critic.dropout=0.0
+
+python train.py n_epochs=1000 agent=sac env_name=CentralizedMultiRobotEnv-v5 hindsight=her agent.critic.dropout=0.0
+
+python train.py n_epochs=200 agent=sac env_name=CentralizedMultiRobotEnv-v6 hindsight=her agent.critic.dropout=0.0
+
+python train.py env_name=CentralizedMultiRobotEnv-v7-0obs agent=sac n_epochs=200
+python train.py env_name=CentralizedMultiRobotEnv-v7-1obs agent=sac n_epochs=200
+python train.py env_name=CentralizedMultiRobotEnv-v7-2obs agent=sac n_epochs=200
+python train.py env_name=CentralizedMultiRobotEnv-v7-3obs agent=sac n_epochs=200
+
 python demo.py --demo_path parker/CentralizedFourRobot-v2/sac_16-36-27
 python demo.py --demo_path parker/CentralizedTwoRobot-v1_5/sac_13-53-33
 python demo.py --demo_path parker/CentralizedThreeRobot-v2_3r/sac_15-04-39
+python demo.py --demo_path parker/CentralizedMultiRobotEnv-v3/sac_16-45-43
+python demo.py --demo_path parker/CentralizedMultiRobotEnv-v6/sac_11-28-26 % not coupled
+python demo.py --demo_path parker/CentralizedMultiRobotEnv-v6/sac_11-52-05 % coupled
+python demo.py --demo_path wrapped_policies/1_robots/ControlledSubset1Robot-wrapped/sac_16-29-45
+python demo.py --demo_path parker/CentralizedMultiRobotEnv-v7-0obs/
 
 
 pip install numpy 1.26.3

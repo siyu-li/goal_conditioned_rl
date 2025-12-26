@@ -28,6 +28,22 @@ def launch(cfg: DictConfig, comm):
     t_total_init = time.time()
     rank_seed = cfg.seed + rank
     envs, env_params = setup_environments(cfg, rank_seed)
+    
+    # Save environment kwargs to .hydra folder
+    if rank == 0:
+        env_kwargs = {}
+        if hasattr(envs[0].unwrapped.spec, 'kwargs') and envs[0].unwrapped.spec.kwargs:
+            env_kwargs = envs[0].unwrapped.spec.kwargs
+        
+        # Get the .hydra directory (created by Hydra)
+        hydra_dir = os.path.join(os.getcwd(), '.hydra')
+        
+        # Save environment kwargs
+        env_kwargs_path = os.path.join(hydra_dir, 'env_kwargs.yaml')
+        with open(env_kwargs_path, 'w') as f:
+            OmegaConf.save(OmegaConf.create(env_kwargs), f)
+        logger.info(f"Environment kwargs saved to {env_kwargs_path}")
+    
     envs, env_params = setup_wrappers(envs, cfg, env_params)
     envs = BatchEnv(envs)
 

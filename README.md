@@ -62,6 +62,22 @@ python demo.py --wandb_url <wandb trial url>
 
 ... more results will follow
 
+## RRT-RL Hierarchical Planning
+
+See [RRT_RL_README.md](RRT_RL_README.md) for commands.
+
+**Quick Start:**
+```bash
+# Train policies
+python train_child_policies.py --num-robots 1 2 --n-epochs 200
+
+# Organize policies  
+python organize_policies.py --source parker/ --dest trained_policies/
+
+# Run demo
+python rrt_rl_demo.py
+```
+
 ## References
 - https://github.com/TianhongDai/hindsight-experience-replay
 - https://github.com/akakzia/decstr

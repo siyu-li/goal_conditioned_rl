@@ -1,0 +1,52 @@
+# Obstacle Configuration for AbstractSixRobotEnv
+# Define static obstacles in the workspace
+
+obstacles:
+  # Circular obstacles
+  # - type: circle
+  #   x: 5.0
+  #   y: 5.0
+  #   radius: 0.8
+    
+  # - type: circle
+  #   x: 3.0
+  #   y: 7.0
+  #   radius: 0.6
+    
+  # - type: circle
+  #   x: 7.0
+  #   y: 3.0
+  #   radius: 0.6
+    
+  # - type: circle
+  #   x: 5.0
+  #   y: 2.0
+  #   radius: 0.5
+    
+  # - type: circle
+  #   x: 2.0
+  #   y: 5.0
+  #   radius: 0.5
+  
+  # Rectangular obstacles (optional, for future extension)
+  # - type: rectangle
+  #   x: 4.0
+  #   y: 6.0
+  #   width: 1.0
+  #   height: 0.5
+  #   rotation: 0.0  # radians
+
+# Workspace boundaries
+workspace:
+  x_min: 0.0
+  x_max: 10.0
+  y_min: 0.0
+  y_max: 10.0
+
+# Robot parameters
+robot:
+  radius: 0.5
+  max_velocity: 0.5
+  num_robots: 6
+  # State per robot: [x, y, theta]
+  # Last action stored as: [dx, dy, dtheta] (used as velocity for moving obstacles)

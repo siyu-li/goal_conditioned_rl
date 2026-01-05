@@ -316,6 +316,88 @@ register(
 )
 
 # =============================================================================
+# REWARD SHAPING VARIANT for CentralizedMultiRobotEnv-v7
+# Adds obstacle proximity penalty for better learning with obstacles
+# =============================================================================
+def _make_v7_rewardshaping_env(**kwargs):
+    """
+    Factory function for CentralizedMultiRobotEnv-v7-rewardshaping with dynamic kwargs.
+    
+    This variant includes obstacle proximity penalty to provide gradual feedback
+    for obstacle avoidance, improving learning when obstacles are present.
+    """
+    from env.Env_v7_rewardshaping import CentralizedMultiRobotEnv
+    
+    # Default values (can be overridden via kwargs)
+    default_kwargs = {
+        'action_coupled': False,
+        'num_robots': 3,
+        'num_obstacles': 1,
+        'robot_radius': 0.5,
+        'max_episode_steps': 50,
+        'render_mode': None,
+    }
+    
+    # Merge defaults with provided kwargs (kwargs take precedence)
+    final_kwargs = {**default_kwargs, **kwargs}
+    
+    return CentralizedMultiRobotEnv(**final_kwargs)
+
+
+# Base v7-rewardshaping environment (default: 3 robots, 1 obstacle)
+register(
+    id='CentralizedMultiRobotEnv-v7-rewardshaping',
+    entry_point='env:_make_v7_rewardshaping_env',
+    max_episode_steps=50,
+    kwargs={
+        'action_coupled': False,
+        'num_robots': 3,
+        'num_obstacles': 1,
+        'robot_radius': 0.5,
+        'max_episode_steps': 50,
+    }
+)
+
+register(
+    id='CentralizedMultiRobotEnv-v7-1obs-rewardshaping',
+    entry_point='env:_make_v7_rewardshaping_env',
+    max_episode_steps=50,
+    kwargs={
+        'action_coupled': False,
+        'num_robots': 3,
+        'num_obstacles': 1,
+        'robot_radius': 0.5,
+        'max_episode_steps': 50,
+    }
+)
+
+register(
+    id='CentralizedMultiRobotEnv-v7-2obs-rewardshaping',
+    entry_point='env:_make_v7_rewardshaping_env',
+    max_episode_steps=50,
+    kwargs={
+        'action_coupled': False,
+        'num_robots': 3,
+        'num_obstacles': 2,
+        'robot_radius': 0.5,
+        'max_episode_steps': 50,
+    }
+)
+
+register(
+    id='CentralizedMultiRobotEnv-v7-3obs-rewardshaping',
+    entry_point='env:_make_v7_rewardshaping_env',
+    max_episode_steps=50,
+    kwargs={
+        'action_coupled': False,
+        'num_robots': 3,
+        'num_obstacles': 3,
+        'robot_radius': 0.5,
+        'max_episode_steps': 50,
+    }
+)
+
+# =============================================================================
 # CONTROLLED SUBSET ENVIRONMENTS (Self-contained, no parent env)
 # =============================================================================
 # These are standalone environments that manage all 6 robots internally.
